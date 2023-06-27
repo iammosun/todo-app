@@ -6,20 +6,26 @@ const MainPage = () => {
   const [tasks, setTasks] = useState(list);
   const [newTask, setNewTask] = useState('');
   const [checkCount, setCheckCount] = useState(0);
+  const [boxesArray, setBoxesArray] = useState([]);
+
 
   useEffect(() => {
+    changeHandler();
+  }, [tasks, boxesArray]);
 
-    const checkBoxes = document.getElementsByClassName('checkBoxes');
-    let arrayBoxes = Array.from(checkBoxes);
+
+  const checkedHandler = () => {
+    const boxesArr = document.getElementsByClassName('checkBoxes');
+    setBoxesArray(boxesArr);
+
     let count = 0;
-    arrayBoxes.map((e) => {
-      if (e.checked) count++;
-      return true;
+    tasks.map((task) => {
+      if (task.checked === true) count++;
     })
 
     setCheckCount(count);
+  }
 
-  }, [tasks])
 
   const submitHandler = (e) => {
     e.preventDefault();
@@ -33,17 +39,12 @@ const MainPage = () => {
     e.target.reset();
   }
 
-  const handleChange = (e) => {
-    const checkBoxes = document.getElementsByClassName('checkBoxes');
-    let arrayBoxes = Array.from(checkBoxes);
-    let count = 0;
-    arrayBoxes.map((e) => {
-      if (e.checked) count++;
-      return true;
-    })
 
-    setCheckCount(count);
+  const changeHandler = (x, y, z) => {
+    x.target.checked ? y.checked = true : y.checked = false;
+    z();
   }
+
 
   return (
     <>
@@ -54,7 +55,9 @@ const MainPage = () => {
             return (
               <form className='flexBody' key={x.id} >
                 <div>
-                  <input className='checkBoxes' type='checkbox' id='checkBox' name={x.id} onChange={handleChange}></input>
+                  <input className='checkBoxes' type='checkbox' id='checkBox' name={x.id}
+                    onChange={(event) => changeHandler(event, x, checkedHandler)}>
+                  </input>
                   <label id='mainTask' htmlFor={x.id}>{x.label}</label>
                 </div>
 
