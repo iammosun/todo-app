@@ -10,7 +10,7 @@ const MainPage = () => {
 
 
   useEffect(() => {
-    changeHandler();
+    checkedHandler();
   }, [tasks, boxesArray]);
 
 
@@ -56,7 +56,7 @@ const MainPage = () => {
               <form className='flexBody' key={x.id} >
                 <div>
                   <input className='checkBoxes' type='checkbox' id='checkBox' name={x.id}
-                    onChange={(event) => changeHandler(event, x, checkedHandler)}>
+                    onChange={(e) => { changeHandler(e, x, checkedHandler) }}>
                   </input>
                   <label id='mainTask' htmlFor={x.id}>{x.label}</label>
                 </div>
