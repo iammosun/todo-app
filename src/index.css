@@ -1,0 +1,37 @@
+input:checked{
+    text-decoration: line-through;
+    color: red;
+    background-color: red;
+}
+
+.flexBody{
+    margin: 1rem;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.mainBody{
+    width: 70%;
+    margin: auto;
+    margin-top: 3rem;
+    text-align: center;
+}
+
+input:checked + label {
+    text-decoration: line-through;
+} 
+
+.addTask{
+    margin-top: 2rem;
+}
+
+.checkBoxDiv{
+    padding: 1rem;
+    border-top: 1px solid rgb(198, 196, 196);
+    border-bottom:1px solid rgb(198, 196, 196);
+}
+
+.cursor{
+    cursor: pointer;
+}
