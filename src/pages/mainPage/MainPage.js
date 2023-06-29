@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { list } from '../../Components/lists/List';
+import MyMaps from '../../Components/myMaps/MyMaps';
+
 
 const MainPage = () => {
 
@@ -14,7 +16,6 @@ const MainPage = () => {
 
     //get the id of last task in the tasks list
     let lastTaskId = (tasks[tasks.length - 1]).id;
-
     setTasks([...tasks, {
       id: lastTaskId + 1,
       label: newTask,
@@ -24,6 +25,7 @@ const MainPage = () => {
     //clear input field
     e.target.reset();
   }
+
 
 
   //check if clicked box is checked or not and update counter accordingly
@@ -37,42 +39,34 @@ const MainPage = () => {
   }
 
 
+  //delete task
+  const onDeleteClick = (e, taskDeleted) => {
+    e.preventDefault();
+
+    //if task to be deleted had been checked, reduce counter
+    if (taskDeleted.checked === true) setCheckCount(checkCount - 1);
+
+    const result = tasks.filter((task) => {
+      return task.id !== taskDeleted.id;
+    });
+    setTasks(result);
+  }
+
+
   return (
     <>
       <div className='mainBody'>
         <h3>THINGS TO DO:</h3>
-
         <div className='checkBoxDiv'>
-          {tasks.map((x) => {
-            return (
-              <form className='flexBody' key={x.id} >
-                <div>
 
-                  {/* checkBox */}
-                  <input className='checkBoxes' type='checkbox' id='checkBox' name={x.id}
-                    onChange={(e) => changeHandler(e, x)}>
-                  </input>
-                  <label id='mainTask' htmlFor={x.id}>{x.label}</label>
-                </div>
+          <MyMaps tasks={tasks}
+            onDeleteClick={onDeleteClick}
+            changeHandler={changeHandler}
+          />
 
-                {/* delete button */}
-                <label htmlFor={x.id}><button className='cursor' onClick={(e) => {
-                  e.preventDefault();
-                  const result = tasks.filter((task) => {
-
-                    //if task to be deleted had been checked, reduce counter
-                    if (x.checked === true) setCheckCount(checkCount - 1);
-                    return task.id !== x.id;
-                  });
-
-                  setTasks(result);
-                }}>x</button></label>
-              </form >
-            );
-          })}
         </div>
-
         <p><b>DONE: {checkCount}</b></p>
+
 
         {/* add new task */}
         <form className='flexBody addTask' onSubmit={submitHandler}>
@@ -81,10 +75,8 @@ const MainPage = () => {
           </input>
           <button className='cursor'>Add Task</button>
         </form>
-
       </div >
     </>
   );
 }
-
 export default MainPage;
