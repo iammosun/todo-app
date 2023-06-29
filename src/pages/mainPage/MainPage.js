@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { list } from './List';
+import { list } from '../../Components/lists/List';
 
 const MainPage = () => {
 
