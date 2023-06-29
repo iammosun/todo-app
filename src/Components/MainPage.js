@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { list } from './List';
 
 const MainPage = () => {
@@ -6,43 +6,34 @@ const MainPage = () => {
   const [tasks, setTasks] = useState(list);
   const [newTask, setNewTask] = useState('');
   const [checkCount, setCheckCount] = useState(0);
-  const [boxesArray, setBoxesArray] = useState([]);
 
 
-  useEffect(() => {
-    checkedHandler();
-  }, [tasks, boxesArray]);
-
-
-  const checkedHandler = () => {
-    const boxesArr = document.getElementsByClassName('checkBoxes');
-    setBoxesArray(boxesArr);
-
-    let count = 0;
-    tasks.map((task) => {
-      if (task.checked === true) count++;
-    })
-
-    setCheckCount(count);
-  }
-
-
+  //Submit new task
   const submitHandler = (e) => {
     e.preventDefault();
-    let lastTask = tasks[tasks.length - 1];
+
+    //get the id of last task in the tasks list
+    let lastTaskId = (tasks[tasks.length - 1]).id;
 
     setTasks([...tasks, {
-      id: lastTask.id + 1,
+      id: lastTaskId + 1,
       label: newTask,
       checked: false
     }]);
+
+    //clear input field
     e.target.reset();
   }
 
 
-  const changeHandler = (x, y, z) => {
-    x.target.checked ? y.checked = true : y.checked = false;
-    z();
+  //check if clicked box is checked or not and update counter accordingly
+  const changeHandler = (x, y) => {
+    if (x.target.checked) {
+      y.checked = true;
+      setCheckCount(checkCount + 1);
+    } else {
+      setCheckCount(checkCount - 1);
+    }
   }
 
 
@@ -50,36 +41,47 @@ const MainPage = () => {
     <>
       <div className='mainBody'>
         <h3>THINGS TO DO:</h3>
+
         <div className='checkBoxDiv'>
           {tasks.map((x) => {
             return (
               <form className='flexBody' key={x.id} >
                 <div>
+
+                  {/* checkBox */}
                   <input className='checkBoxes' type='checkbox' id='checkBox' name={x.id}
-                    onChange={(e) => { changeHandler(e, x, checkedHandler) }}>
+                    onChange={(e) => changeHandler(e, x)}>
                   </input>
                   <label id='mainTask' htmlFor={x.id}>{x.label}</label>
                 </div>
 
+                {/* delete button */}
                 <label htmlFor={x.id}><button className='cursor' onClick={(e) => {
                   e.preventDefault();
                   const result = tasks.filter((task) => {
+
+                    //if task to be deleted had been checked, reduce counter
+                    if (x.checked === true) setCheckCount(checkCount - 1);
                     return task.id !== x.id;
                   });
+
                   setTasks(result);
                 }}>x</button></label>
               </form >
             );
           })}
         </div>
-        <p>{checkCount}</p>
 
+        <p><b>DONE: {checkCount}</b></p>
+
+        {/* add new task */}
         <form className='flexBody addTask' onSubmit={submitHandler}>
           <input onChange={(e) => setNewTask(e.target.value)}
             type='text' id='task' placeholder='add task' required>
           </input>
           <button className='cursor'>Add Task</button>
         </form>
+
       </div >
     </>
   );
