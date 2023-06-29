@@ -1,5 +1,3 @@
-
-
 export const list = [
   {
     id: 0,
